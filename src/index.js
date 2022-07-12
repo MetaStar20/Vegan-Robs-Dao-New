@@ -2,13 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { store } from './redux/store';
 import { Provider as ReduxProvider } from 'react-redux';
+// import { Web3Provider } from './Context/Web3Context';
 import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ReduxProvider store={store}>
+      {/* <Web3Provider> */}
       <App />
+      {/* </Web3Provider> */}
     </ReduxProvider>
   </React.StrictMode>
 );

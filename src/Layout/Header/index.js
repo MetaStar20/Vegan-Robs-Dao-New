@@ -3,17 +3,19 @@ import {
     Avatar,
     AppBar,
     Box,
+    Button,
     Toolbar,
     Tooltip,
     Typography,
-    Button,
     IconButton,
-    Stack
+    Stack,
+    useMediaQuery
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Web3 from 'web3';
 import { useTheme } from '@mui/material/styles';
 import { useDispatch } from 'react-redux';
+import MenuIcon from '@mui/icons-material/Menu';
 import { setToLS } from '../../Utils/storage';
 import { RPC, vrtABI, vrtAddress, daoABI, daoAddress } from '../../Constants/config';
 
@@ -162,24 +164,35 @@ class Header extends React.Component {
                         py: 2,
                     }}
                 >
-                    <Toolbar sx={{ gap: 6 }}>
-                        {/* <IconButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                        > */}
-                            {/* <MenuIcon /> */}
-                        {/* </IconButton> */}
-                        <Link to="/">
-                            <Box 
-                                component="img" 
-                                src={ this.props.theme.palette.mode === 'dark' ? "/images/logo_main_white.png" : "/images/logo_main.png"} />
-                        </Link>
-                        <Typography variant="h2" sx={{ flexGrow: 1, color: this.props.theme.palette.text.primary }}>
-                            Vegan Rob’s DAO
-                        </Typography>
+                    <Toolbar sx={{ gap: this.props.matchUpMd ? 6 : 2, justifyContent: 'space-between' }}>
+                        <Stack alignItems="center" flexDirection="row" gap={this.props.matchUpMd ? 6 : 2}>
+                            <Button
+                                size="small"
+                                edge="start"
+                                variant="outlined"
+                                // color="inherit"
+                                aria-label="menu"
+                                onClick={() => this.props.handleDrawerOpen()}
+                                sx={{ px: 1, minWidth: 'unset', display: { sm: 'block', md: 'none' } }}
+                            >
+                                <MenuIcon />
+                            </Button>
+                            <Link to="/">
+                                <Box 
+                                    sx={{ display: { xs: 'none', sm: 'block' }}}
+                                    component="img" 
+                                    src={ this.props.theme.palette.mode === 'dark' ? "/images/logo_main_white.png" : "/images/logo_main.png"} />
+                            </Link>
+                            <Typography variant="h2" 
+                                sx={{ 
+                                    flexGrow: 1, 
+                                    color: this.props.theme.palette.text.primary,
+                                    display: { xs: 'none', md: 'block' }
+                                }}  
+                            >
+                                Vegan Rob’s DAO
+                            </Typography>
+                        </Stack>
                         <Stack flexDirection="row" gap={5} alignItems="center">
                             <Button 
                                 variant="contained" 
@@ -187,12 +200,15 @@ class Header extends React.Component {
                                 disabled={this.state.account ? true: false}
                                 sx={{ 
                                     fontWeight: 700,
+                                    display: { xs: 'none', sm: 'block' },
                                     color: this.props.theme.palette.common.white  
                                 }}
                                 onClick={() => this.walletConnect()}
-                            >Connect Wallet</Button>
+                            >
+                            {this.props.matchUpMd ? "Connect Wallet": "C" }</Button>
                             <Stack flexDirection="row" alignItems="center" gap={4}>
-                                <Stack flexDirection="row" alignItems="center" gap={1}>
+                                <Stack flexDirection="row" alignItems="center" gap={1} sx={{
+                                    display: { xs: 'none', sm: 'flex' }}}>
                                     <Avatar sx={{ width: 36, height:  36, bgcolor: this.props.theme.palette.text.primary }} />
                                     <Stack>
                                         {this.state.account 
@@ -246,7 +262,8 @@ const withHook = (Header) => {
     return (props) => {
         const theme = useTheme();
         const dispatch = useDispatch();
-        return <Header theme={theme} dispatch={dispatch} {...props} />;
+        const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
+        return <Header theme={theme} dispatch={dispatch} {...props} matchUpMd={matchUpMd} />;
     }
 };
 

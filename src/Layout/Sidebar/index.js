@@ -9,6 +9,7 @@ import {
     List,
     ListItem,
     ListItemIcon,
+    useMediaQuery
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link, matchPath, useLocation } from 'react-router-dom';
@@ -17,8 +18,8 @@ import HowToVoteOutlinedIcon from '@mui/icons-material/HowToVoteOutlined';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 
-const drawerWidth = 240;
-const Menu = () => {
+const drawerWidth = 260;
+const Menu = (props) => {
 
     const theme = useTheme();
     const { pathname } = useLocation();
@@ -26,6 +27,8 @@ const Menu = () => {
 
     const handleListItemClick = (event, index) => {
         setSelected(index);
+        props.handleDrawerClose()
+        console.log(props.handleDrawerClose)
     }
 
     return (
@@ -79,18 +82,15 @@ const Menu = () => {
 
 export default function Sidebar (props) {
     const { window } = props;
-    const [mobileOpen, setMobileOpen] = React.useState(false);
     const theme = useTheme ();
+    const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
     const container = window !== undefined ? () => window().document.body : undefined;
     return (
         <Box
             component="nav"
             sx={{ 
-                width: { sm: drawerWidth }, 
+                width: { md: drawerWidth }, 
                 flexShrink: { sm: 0 },
                 bgcolor: theme.palette.background.paper
             }}
@@ -99,35 +99,37 @@ export default function Sidebar (props) {
             <Drawer
                 container={container}
                 variant="temporary"
-                open={mobileOpen}
-                onClose={handleDrawerToggle}
+                open={props.open}
+                onClose={() => props.handleDrawerClose()}
                 ModalProps={{
                     keepMounted: true, // Better open performance on mobile.
                 }}
                 sx={{
-                    display: { xs: 'block', sm: 'none' },
+                    display: { sm: 'block', md: 'none' },
                     '& .MuiDrawer-paper': { 
                         boxSizing: 'border-box', 
                         width: drawerWidth,
+                        display: { sm: 'block', md: 'none', xs: 'block' },
                         bgcolor: theme.palette.background.default,
                     },
                 }}
             >
-                <Menu />
+                <Menu handleDrawerClose={props.handleDrawerClose} />
             </Drawer>
             <Drawer
                 variant="permanent"
                 sx={{
-                    display: { xs: 'none', sm: 'block' },
+                    display: { sm: 'none', md: 'block', xs: 'none' },
                     '& .MuiDrawer-paper': { 
                         boxSizing: 'border-box', 
                         width: drawerWidth,
+                        display: { sm: 'none', md: 'block', xs: 'none' },
                         bgcolor: theme.palette.background.default,
                     },
                 }}
                 open
             >
-                <Menu />
+                <Menu handleDrawerClose={props.handleDrawerClose} />
             </Drawer>
         </Box>
     )

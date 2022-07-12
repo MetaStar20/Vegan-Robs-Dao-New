@@ -138,7 +138,7 @@ class Elections extends React.Component {
                         sx={{
                             position: 'relative',
                             py: 4,
-                            pl: 7,
+                            pl: this.props.matchUpMd ? 7 : 2,
                             '&::after': {
                                 content: `""`,
                                 background: 'url(/images/background.png)',
@@ -152,9 +152,15 @@ class Elections extends React.Component {
                         }}
                     >
                         <Typography variant="h3">Elections</Typography>
-                        <Stack flexDirection="row" gap={9} justifyContent="center" sx={{ pt: 4, px: 4 }}>
+                        <Stack 
+                            flexDirection={this.props.matchUpMd ? "row" : "column"} 
+                            gap={this.props.matchUpLg ? 9 : 6} 
+                            justifyContent="center" 
+                            sx={{ pt: 4, px: this.props.matchUpMd ? 4 : 2 }}
+                        >
                         {cards.map ((element, key) => 
-                            <Box
+                            <Stack
+                                justifyContent="space-between"
                                 key={key}
                                 flex={1}
                                 sx={{
@@ -182,14 +188,14 @@ class Elections extends React.Component {
                                 : this.state.ended
                                 }
                                 </Typography>
-                            </Box>
+                            </Stack>
                         )}
                         </Stack>
                     </Box>
                 </Box>
                 <Box sx={{
                     pt: 4,
-                    px: 7
+                    px: this.props.matchUpMd ? 7 : 2
                 }}>
                     <Stack flexDirection="row" justifyContent="space-between" alignItems="center" sx={{ pb: 1 }}>
                         <Typography variant="h3">Election Status</Typography>
@@ -246,7 +252,7 @@ class Elections extends React.Component {
                     <Stack gap={2}>
                     {this.state.realElections.map((element, key) => 
                         <Stack 
-                            flexDirection="row" 
+                            flexDirection={this.props.matchUpMd ? "row" : "column" }
                             key={key}
                             // onClick={() => this.props.navigate(`/elections/${(element.id / 1)}`)}
                             sx={{ 
@@ -294,9 +300,12 @@ class Elections extends React.Component {
                                     <Typography variant="body2" sx={{ color: this.props.theme.palette.text.secondary }}>Leading : </Typography>
                                     <Typography variant="body2" >&nbsp;No</Typography>
                                 </Stack>
-                                <Stack flexDirection="row" alignItems="center" justifyContent="space-between" sx={{ pt: 1 }}>
-                                    <Stack flexDirection="row" alignItems="center" gap={4}>
-                                        <Stack flexDirection="row" alignItems="center" gap={1}>
+                                <Stack flexDirection={this.props.matchUpMd ? "row" : "column"} alignItems="center" justifyContent="space-between" 
+                                    sx={{ pt: 1 }}
+                                    gap={this.props.matchUpMd ? 0 : 2}
+                                >
+                                    <Stack flexDirection={this.props.matchUpMd ? "row" : "column"} justifyContent="flex-start" alignItems="center" gap={4}>
+                                        <Stack flexDirection="row" alignItems="center" justifyContent="flex-start" gap={1}>
                                             <Chip label={<Typography variant="caption"
                                                 sx={{ 
                                                     color: element.isVoteEnded 

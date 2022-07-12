@@ -4,12 +4,15 @@ import {
     Typography,
     Stack,
     Skeleton,
+    TableContainer,
     Table,
     TableBody,
     TableRow,
     TableCell,
     TableHead,
-    Pagination
+    Pagination,
+    Paper,
+    useMediaQuery
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
@@ -19,7 +22,7 @@ import { RPC, vrtABI, vrtAddress, daoABI, daoAddress } from '../../Constants/con
 const web3 = new Web3(new Web3.providers.HttpProvider(RPC));
 const vrtContract = new web3.eth.Contract(vrtABI, vrtAddress);
 const daoContract = new web3.eth.Contract(daoABI, daoAddress);
-const pageStep = 5;
+const pageStep = 20;
 
 const cards = [
     { img: '/images/total_supply.png', color: '#FFF2EC', img_dark: '/images/total_supply_dark.png', title: 'Total Supply', price: '45,230,256' },
@@ -106,7 +109,7 @@ class Dashboard extends React.Component {
                         sx={{
                             position: 'relative',
                             py: 4,
-                            px: 7,
+                            px: this.props.matchUpMd ? 7 : 2,
                             '&::after': {
                                 content: `""`,
                                 background: 'url(/images/background.png)',
@@ -121,7 +124,15 @@ class Dashboard extends React.Component {
                         }}
                     >
                         <Typography variant="h3">Vegan Rob's Governance Token</Typography>
-                        <Stack flexDirection="row" gap={9} justifyContent="center" sx={{ pt: 4, px: 4 }}>
+                        <Stack 
+                            flexDirection={this.props.matchUpMd ? "row" : "column"} 
+                            gap={this.props.matchDownLg ? 6: 9 } 
+                            justifyContent="center" 
+                            sx={{ 
+                                pt: 4, 
+                                px: 4 
+                            }}
+                        >
                         {cards.map ((element, key) => 
                             <Box
                                 key={key}
@@ -159,66 +170,69 @@ class Dashboard extends React.Component {
                 </Box>
                 <Box sx={{
                     pt: 4,
-                    px: 7
+                    px: this.props.matchUpMd ? 7 : 2,
+                    maxWidth: '100%',
                 }}>
                     <Typography variant="h3">Members of Vegan Rob's DAO</Typography>
                     <Box sx={{
                         pt: 3,
-                        px: 6
+                        px: this.props.matchUpMd ? 6 : 0
                     }}>
-                        <Table>
-                            <TableHead>
-                                <TableRow sx={{ '& th': { color: this.props.theme.palette.text.secondary } }}>
-                                    <TableCell align="left">No</TableCell>
-                                    <TableCell align="center">Holder Address</TableCell>
-                                    <TableCell align="center">Balance</TableCell>
-                                    <TableCell align="center">Percentage</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                            {!this.state.loading ? 
-                            this.state.realHolderTable.map((row, index) => (
-                                <TableRow
-                                    key={index}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell align="left">
-                                        {row.id}
-                                    </TableCell>
-                                    <TableCell align="center">{row.address}</TableCell>
-                                    <TableCell align="center">{row.balance}</TableCell>
-                                    <TableCell 
-                                        align="center" 
-                                        sx={{ 
-                                            color:  this.props.theme.palette.success.main
-                                            // color: index % 2 ? this.props.theme.palette.error.main : this.props.theme.palette.success.main 
-                                        }}
-                                    >{row.percentage}%</TableCell>
-                                </TableRow>
-                            ))
-                            :
-                            [1,2,3,4,5,6,7,8,9,10].map((row, key) => (
-                                <TableRow
-                                    key={key}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell align="left">
-                                        <Skeleton />
-                                    </TableCell>
-                                    <TableCell align="center"><Skeleton /></TableCell>
-                                    <TableCell align="center"><Skeleton /></TableCell>
-                                    <TableCell 
-                                        align="center" 
-                                        sx={{ 
-                                            color:  this.props.theme.palette.success.main
-                                            // color: index % 2 ? this.props.theme.palette.error.main : this.props.theme.palette.success.main 
-                                        }}
-                                    ><Skeleton /></TableCell>
-                                </TableRow>
-                            ))
-                            }
-                            </TableBody>
-                        </Table>
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow sx={{ '& th': { color: this.props.theme.palette.text.secondary } }}>
+                                        <TableCell align="left">No</TableCell>
+                                        <TableCell align="center">Holder Address</TableCell>
+                                        <TableCell align="center">Balance</TableCell>
+                                        <TableCell align="center">Percentage</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                {!this.state.loading ? 
+                                this.state.realHolderTable.map((row, index) => (
+                                    <TableRow
+                                        key={index}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell align="left">
+                                            {row.id}
+                                        </TableCell>
+                                        <TableCell align="center">{row.address}</TableCell>
+                                        <TableCell align="center">{row.balance}</TableCell>
+                                        <TableCell 
+                                            align="center" 
+                                            sx={{ 
+                                                color:  this.props.theme.palette.success.main
+                                                // color: index % 2 ? this.props.theme.palette.error.main : this.props.theme.palette.success.main 
+                                            }}
+                                        >{row.percentage}%</TableCell>
+                                    </TableRow>
+                                ))
+                                :
+                                [1,2,3,4,5,6,7,8,9,10].map((row, key) => (
+                                    <TableRow
+                                        key={key}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell align="left">
+                                            <Skeleton />
+                                        </TableCell>
+                                        <TableCell align="center"><Skeleton /></TableCell>
+                                        <TableCell align="center"><Skeleton /></TableCell>
+                                        <TableCell 
+                                            align="center" 
+                                            sx={{ 
+                                                color:  this.props.theme.palette.success.main
+                                                // color: index % 2 ? this.props.theme.palette.error.main : this.props.theme.palette.success.main 
+                                            }}
+                                        ><Skeleton /></TableCell>
+                                    </TableRow>
+                                ))
+                                }
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                         <Stack flexDirection="row" alignItems="flex-end" justifyContent="flex-end" sx={{ pt: 2 }}>
                             <Pagination 
                                 count={Math.ceil(this.state.holders.length / pageStep)} 
@@ -239,8 +253,19 @@ class Dashboard extends React.Component {
 const withHook = (Component) => {
     return (props) => {
         const theme = useTheme ();
+        const matchDownLg = useMediaQuery(theme.breakpoints.down('lg'));
+        const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
+        // const matchDownMd = useMediaQuery(theme.breakpoints.up('md'));
         const { account } = useSelector((state) => state.userReducer);
-        return <Component theme={theme} {...props} account={account} />;
+        return (
+            <Component 
+                theme={theme}
+                account={account}
+                matchDownLg={matchDownLg}
+                matchUpMd={matchUpMd}
+                {...props}  
+            />
+        );
     }
 }
 

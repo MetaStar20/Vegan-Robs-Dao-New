@@ -8,7 +8,9 @@ import {
     TableHead,
     TableRow,
     TableCell,
-    TableBody
+    TableBody,
+    TableContainer,
+    useMediaQuery
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
@@ -76,7 +78,7 @@ class Vote extends React.Component {
             params: [{ chainId: web3.utils.toHex(1666600000) }],
         });
     
-        const linkedContract = new web3.eth.Contract(daoABI, daoAddress);
+        const linkedContract = new window.web3.eth.Contract(daoABI, daoAddress);
         console.log(linkedContract)
         await linkedContract.methods.vote(proposalID , trueOrFalse)
         .send({from : this.props.account})
@@ -95,7 +97,7 @@ class Vote extends React.Component {
             params: [{ chainId: web3.utils.toHex(1666600000) }],
         });
     
-        const linkedContract = new web3.eth.Contract(daoABI, daoAddress);
+        const linkedContract = new window.web3.eth.Contract(daoABI, daoAddress);
         await linkedContract.methods.stopVoting(proposalID)
         .send({from : this.props.account})
         .once('confirmation', async () => {
@@ -115,13 +117,14 @@ class Vote extends React.Component {
                 >
                     <Stack 
                         sx={{ 
-                            px: 5, 
+                            px: this.props.matchUpMd ? 5 : 2, 
                             py: 2,
                             bgcolor: this.props.theme.palette.background.default
                         }}
                     >
                         <Typography variant="h3">Vote to New Products Election</Typography>
                         <Box sx={{ pt: 7 }}>
+                            <TableContainer>
                             <Table>
                                 <TableHead>
                                     <TableRow
@@ -205,6 +208,7 @@ class Vote extends React.Component {
                                 ))}
                                 </TableBody>
                             </Table>
+                            </TableContainer>
                         </Box>
                     </Stack>
                 </Box>
@@ -216,9 +220,10 @@ class Vote extends React.Component {
 const withHook = (Component) => {
     return (props) => {
         const theme = useTheme();
+        const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
         const { account, position } = useSelector((state) => state.userReducer);
         return (
-            <Component theme={theme} position={position} account={account} {...props} />
+            <Component theme={theme} position={position} account={account} matchUpMd={matchUpMd} {...props} />
         )
     }
 }

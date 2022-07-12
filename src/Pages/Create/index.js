@@ -7,7 +7,8 @@ import {
     Typography,
     Stack,
     TextareaAutosize,
-    Input
+    Input,
+    useMediaQuery
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
@@ -71,7 +72,7 @@ class Create extends React.Component {
                 params: [{ chainId: web3.utils.toHex(1666600000) }],
             });
 
-            const linkedContract = new web3.eth.Contract(daoABI, daoAddress);
+            const linkedContract = new window.web3.eth.Contract(daoABI, daoAddress);
             await linkedContract.methods.createProposal(this.state.content + '', response.pinataUrl + '')
             .send({from : this.props.account})
             .once('confirmation', async () => {
@@ -85,7 +86,7 @@ class Create extends React.Component {
     render () {
         return (
             <Box sx={{ p: 1.5, pb: 7, bgcolor: this.props.theme.palette.background.neutral }}>
-                <Stack sx={{ px: 5, pt: 2, bgcolor: this.props.theme.palette.background.default }}>  
+                <Stack sx={{ px: this.props.matchUpMd ? 5 : 2, pt: 2, bgcolor: this.props.theme.palette.background.default }}>  
                     <Typography variant="h3">Create New Election</Typography>
                     <Box sx={{ pt: 3 }} component="form" onSubmit={this.handleCreate}>
                         <Box>
@@ -97,12 +98,14 @@ class Create extends React.Component {
                             }
                             
                             <Typography variant="subtitle1">1. Attachments</Typography>
-                            <Stack flexDirection="row" gap={3} alignItems="flex-start" sx={{ pt: 2 }}>
+                            <Stack flexDirection={this.props.matchUpMd ? "row": "column"} gap={3} alignItems="flex-start" sx={{ pt: 2 }}>
                                 <Stack alignItems="center" 
                                     justifyContent="center"
                                     sx={{ 
-                                        width: 260, 
-                                        height: 220,
+                                        width: '100%',
+                                        maxWidth: 260, 
+                                        height: '100%',
+                                        maxHeight: 220,
                                         borderRadius: 2,
                                         p: 2,
                                         border: `1px solid ${this.props.theme.palette.divider}`
@@ -183,11 +186,12 @@ class Create extends React.Component {
 const withHook = (Component) => {
     return (props) => {
         const theme = useTheme();
+        const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
         const navigate = useNavigate();
         const { account } = useSelector((state) => state.userReducer);
 
         return (
-            <Component theme={theme} navigate={navigate} account={account} {...props} />
+            <Component theme={theme} navigate={navigate} account={account} matchUpMd={matchUpMd} {...props} />
         )
     }
 }

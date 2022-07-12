@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Stack, Link } from '@mui/material';
+import { Box, Typography, Stack, Link, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 class Footer extends React.Component {
@@ -17,11 +17,12 @@ class Footer extends React.Component {
                     bgcolor: this.props.theme.palette.background.neutral,
                     width: '100%',
                     py: 1,
-                    pl: 30,
+                    pr: 2,
+                    pl: this.props.matchUpMd ? 30 : 2,
                     borderTop: `1px solid ${this.props.theme.palette.divider}`
                 }}
             >
-                <Stack flexDirection="row" alignItems="center" gap={12}>
+                <Stack flexDirection="row" alignItems="center" justifyContent='space-between'>
                     <Typography variant="caption" sx={{ color: this.props.theme.palette.text.disabled }}>@ 2022 Vegan Rob's</Typography>
                     <Link href="https://veganrobs.com" target="_blank" sx={{ textDecoration: 'none' }}>
                         <Typography 
@@ -48,8 +49,9 @@ class Footer extends React.Component {
 const withHook = (Component) => {
     return (props) => {
         const theme = useTheme ();
+        const matchUpMd = useMediaQuery(theme.breakpoints.up('md'))
         return (
-            <Component theme={theme} {...props} />
+            <Component theme={theme} matchUpMd={matchUpMd} {...props} />
         )
     }
 }

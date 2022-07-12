@@ -31,11 +31,15 @@ export default function Layout () {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <Header />
-            <Sidebar />
+            <Header handleDrawerOpen={handleDrawerOpen} />
+            <Sidebar open={open} handleDrawerClose={handleDrawerClose} />
             <Box
                 component="main"
-                sx={{ flexGrow: 1, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+                sx={{ 
+                    flexGrow: 1, 
+                    width: '100%'
+                    // width: { sm: `calc(100% - ${drawerWidth}px)` } 
+                }}
             >
                 <Toolbar sx={{ my: 2 }} />
                 <Outlet />
