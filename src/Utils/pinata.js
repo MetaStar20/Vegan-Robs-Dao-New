@@ -1,7 +1,7 @@
 import { pinata_key, pinata_secret } from "../Constants/config";
 import axios from 'axios';
 
-export const pinFileToIPFS = (file) => {
+export const pinFileToIPFS =async (file) => {
     const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
     
     let formData = new FormData();

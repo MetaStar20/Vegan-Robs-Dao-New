@@ -154,7 +154,7 @@ class Vote extends React.Component {
                                         }}
                                     >
                                         <TableCell align="left">
-                                            {(element.id / 1)}
+                                            {key + 1}
                                         </TableCell>
                                         <TableCell align="center">
                                             <Stack 

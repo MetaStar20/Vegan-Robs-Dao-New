@@ -60,12 +60,14 @@ class Create extends React.Component {
 
     async handleCreate (e) {
         e.preventDefault();
-        if (this.state.owner === '' || 
-            this.state.admin || 
-            (this.state.admin !== '' && this.state.admin !== this.props.account) ||
-            (this.state.owner !== '' && this.state.owner !== this.props.account)
-        ) return;
+        console.log(this.state)
+        if (this.state.owner === '') return;
+        if (this.state.admin === '') return;
+
+        if (this.state.owner !== '' && this.state.owner !== this.props.account && this.state.admin !== '' && this.state.admin !== this.props.account)
+            return;
         const response  = await pinFileToIPFS(this.state.files[0])
+
         if (response.success) {
             await window.ethereum.request({
                 method: 'wallet_switchEthereumChain',
