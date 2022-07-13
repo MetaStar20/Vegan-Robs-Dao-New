@@ -204,8 +204,7 @@ class Header extends React.Component {
                                     color: this.props.theme.palette.common.white  
                                 }}
                                 onClick={() => this.walletConnect()}
-                            >
-                            {this.props.matchUpMd ? "Connect Wallet": "C" }</Button>
+                            >Connect Wallet</Button>
                             <Stack flexDirection="row" alignItems="center" gap={4}>
                                 <Stack flexDirection="row" alignItems="center" gap={1} sx={{
                                     display: { xs: 'none', sm: 'flex' }}}>

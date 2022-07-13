@@ -17,14 +17,13 @@ class Footer extends React.Component {
                     bgcolor: this.props.theme.palette.background.neutral,
                     width: '100%',
                     py: 1,
-                    pr: 2,
-                    pl: this.props.matchUpMd ? 30 : 2,
+                    px: this.props.matchUpMd ? 30 : 2,
                     borderTop: `1px solid ${this.props.theme.palette.divider}`
                 }}
             >
                 <Stack flexDirection="row" alignItems="center" justifyContent='space-between'>
                     <Typography variant="caption" sx={{ color: this.props.theme.palette.text.disabled }}>@ 2022 Vegan Rob's</Typography>
-                    <Link href="https://veganrobs.com" target="_blank" sx={{ textDecoration: 'none' }}>
+                    <Link href="https://veganrobs.com" target="_blank" sx={{ textDecoration: 'none', display: 'flex' }}>
                         <Typography 
                             variant="caption" 
                             sx={{ 
@@ -32,7 +31,7 @@ class Footer extends React.Component {
                             }}
                         >veganrobs.com</Typography>
                     </Link>
-                    <Link href="https://veganrobstoken.com" target="_blank" sx={{ textDecoration: 'none' }}>
+                    <Link href="https://veganrobstoken.com" target="_blank" sx={{ textDecoration: 'none', display: 'flex' }}>
                         <Typography 
                             variant="caption" 
                             sx={{ 
